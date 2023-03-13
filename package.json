@@ -1,0 +1,45 @@
+{
+  "name": "astro-sanity-picture",
+  "version": "0.1.0",
+  "description": "",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "check": "tsc --noEmit -p ."
+  },
+  "dependencies": {
+    "@sanity/image-url": "^1.0.2",
+    "groq": "^3.6.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^5.50.0",
+    "astro": "^2.1.2",
+    "eslint": "^8.33.0",
+    "eslint-plugin-astro": "^0.23.0",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "prettier": "^2.8.3",
+    "prettier-plugin-astro": "0.1.0-next.5",
+    "typescript": "^4.9.5"
+  },
+  "peerDependencies": {
+    "astro": "> 2.0.0"
+  },
+  "keywords": [
+    "astro",
+    "astro-component",
+    "astro-components",
+    "sanity",
+    "picture",
+    "responsive"
+  ],
+  "author": "Otterdev",
+  "maintainers": [
+    {
+      "name": "Christopher Fraser",
+      "email": "chris@otterdev.io"
+    }
+  ],
+  "license": "ISC"
+}

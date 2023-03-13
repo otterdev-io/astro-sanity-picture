@@ -1,0 +1,142 @@
+---
+// Renders a <picture /> element with sources generated from the `sources` and `widths` attributes
+// When these attribtues are not provided, uses sensible defaults
+
+import { defaultSanityPictureDefaults } from "./defaults";
+import {
+  generateWidths,
+  isSanityDimensionedImage,
+  isSanityImageWithLqip,
+  mergeSingleRecursive,
+} from "./fns";
+import type {
+  ImgAttributes,
+  PictureAttributes,
+  SanityPictureProps,
+} from "./types";
+
+type Props = SanityPictureProps;
+
+//Max default allows for 1920px width @ 2x
+const defaults = (globalThis.sanityPictureDefaults ??=
+  defaultSanityPictureDefaults);
+
+const {
+  imageUrlBuilder,
+  src,
+  sources,
+  widths,
+  img,
+  lqip,
+  ...pictureAttributes
+} = Astro.props;
+
+const builder = (imageUrlBuilder ?? defaults.imageUrlBuilder)?.image(src);
+
+if (!builder) {
+  throw new Error("No image url builder specified, and no default set!");
+}
+
+const determinedWidths = Array.isArray(widths)
+  ? widths
+  : generateWidths(widths ?? defaults.autoWidths, src);
+
+// If consumer did not provide sources, we'll do a default one, ensuring baseline responsiveness and webp conversion
+const determinedSources = sources ?? [{}];
+
+const determinedLqip = lqip ?? defaults.lqip;
+
+const lqipStyle: PictureAttributes["style"] =
+  determinedLqip.enabled && isSanityImageWithLqip(src)
+    ? {
+        backgroundImage: `url(${src.asset.metadata.lqip})`,
+      }
+    : {};
+
+// Default picture styling to flex, ensuring the contained image consumes full height
+const determinedPictureAttributes = mergeSingleRecursive<PictureAttributes>(
+  { style: lqipStyle },
+  { style: defaults.style },
+  pictureAttributes
+);
+
+// Default image styling to consume full width of the picture container
+const determinedImgAttributes = mergeSingleRecursive<ImgAttributes>(
+  defaults.img,
+  img ?? {},
+  { style: determinedLqip.enabled ? { opacity: 0 } : {} }
+);
+
+const [imgWidth, imgHeight] = isSanityDimensionedImage(src)
+  ? [src.asset.metadata.dimensions.width, src.asset.metadata.dimensions.height]
+  : [undefined, undefined];
+---
+
+<picture {...determinedPictureAttributes}>
+  {determinedSources.map(({ options, withWebp, ...attributes }) => {
+    const srcset = determinedWidths
+      .map(
+        (w: number) =>
+          `${builder
+            .width(w)
+            .withOptions(options ?? {})
+            .url()} ${w}w`
+      )
+      .join(", ")
+    const includeWebp = withWebp ?? defaults.withWebp
+    const webpSrcSet = includeWebp
+      ? determinedWidths
+          .map(
+            (w: number) =>
+              `${builder
+                .width(w)
+                .withOptions(options ?? {})
+                .withOptions({ format: "webp" })
+                .url()} ${w}w`
+          )
+          .join(", ")
+      : undefined
+    return (
+      <>
+        {includeWebp && (
+          <source
+            srcset={webpSrcSet}
+            type="image/webp"
+            {...(attributes ?? {})}
+          />
+        )}
+        <source srcset={srcset} {...(attributes ?? {})} />
+      </>
+    )
+  })}
+  <img
+    src={builder.url()}
+    width={imgWidth}
+    height={imgHeight}
+    data-x-lqip={determinedLqip.enabled ? "true" : "false"}
+    data-x-lqip-transition-duration={determinedLqip.enabled
+      ? determinedLqip.transitionDuration.toString()
+      : "0"}
+    {...determinedImgAttributes}
+  />
+</picture>
+
+<script>
+  //
+  const lqipImages = document.querySelectorAll<HTMLImageElement>(
+    'img[data-x-lqip="true"]'
+  );
+
+  // Handle clicks on each button.
+  lqipImages.forEach((img) => {
+    img.addEventListener("load", () => {
+      img.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: parseInt(img.dataset["xLqipTransitionDuration"]!),
+        fill: "forwards",
+      });
+    });
+    if (img.complete) {
+      img.style.opacity = "1";
+    }
+  });
+</script>
