@@ -1,8 +1,10 @@
 {
   "name": "astro-sanity-picture",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "An Astro component for rendering a responsive <picture> element for an image fetched from Sanity",
   "type": "module",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts"
   },
