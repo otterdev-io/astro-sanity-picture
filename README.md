@@ -1,5 +1,4 @@
 # astro-sanity-picture
----
 An astro component for rendering a responsive <picture> element for an image fetched from [Sanity](https://www.sanity.io). It will generate the element with a set of image sources for optimised resolutions and formats, using sanity's image API to serve the optimised images.
 
 # Usage

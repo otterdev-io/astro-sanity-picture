@@ -1,7 +1,7 @@
 {
   "name": "astro-sanity-picture",
-  "version": "0.1.0",
-  "description": "",
+  "version": "0.1.1",
+  "description": "An Astro component for rendering a responsive <picture> element for an image fetched from Sanity",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
@@ -34,6 +34,11 @@
     "picture",
     "responsive"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/otterdev-io/astro-sanity-picture.git"
+  },
+  "homepage": "https://github.com/otterdev-io/astro-sanity-picture#readme",
   "author": "Otterdev",
   "maintainers": [
     {
