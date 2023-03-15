@@ -1,3 +1,4 @@
+//@ts-nocheck
 import SanityPicture from "./sanity-picture.astro";
 export default SanityPicture;
 

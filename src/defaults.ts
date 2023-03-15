@@ -1,4 +1,4 @@
-import type { SanityPictureDefaults } from "types";
+import type { SanityPictureDefaults } from "./types";
 /**
  * The default values for sanityPictureDefaults
  * The width has been picked to full-width images for up to 1920px @2x screens

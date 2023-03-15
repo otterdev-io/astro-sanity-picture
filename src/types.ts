@@ -103,3 +103,7 @@ export type SourceAttributes = astroHTML.JSX.DefinedIntrinsicElements["source"];
 export type PictureAttributes =
   astroHTML.JSX.DefinedIntrinsicElements["picture"];
 export type ImgAttributes = astroHTML.JSX.DefinedIntrinsicElements["img"];
+
+declare global {
+  var sanityPictureDefaults: SanityPictureDefaults;
+}
