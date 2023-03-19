@@ -74,7 +74,7 @@ export function isSanityImageWithLqip(
 /**
  * Calculate automatically determined widths for an image
  * Maximum width is bounded by autoWidths.maxWidth
- * Number of divisions is the minimum of (maxWidth / autoWidths.step), and autoWidths.maxDivisions
+ * Generate widths, incrementing by autoWidths.step px
  * @param autoWidths autowidths settings to use
  * @param image image to calculate off of
  * @returns array of widths
@@ -86,11 +86,8 @@ export function generateWidths(
   const maxWidth = isSanityDimensionedImage(image)
     ? image.asset.metadata.dimensions.width
     : autoWidths.maxWidth;
-  const divisions = Math.ceil(
-    Math.min(maxWidth / autoWidths.step, autoWidths.maxDivisions)
-  );
-  const step = maxWidth / divisions;
+  const divisions = Math.ceil(maxWidth / autoWidths.step);
   return Array.from({ length: divisions }, (_, i) =>
-    Math.floor(step * (i + 1))
+    Math.min(Math.floor(autoWidths.step * (i + 1)), maxWidth)
   );
 }

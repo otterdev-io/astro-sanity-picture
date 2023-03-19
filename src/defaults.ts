@@ -6,7 +6,6 @@ import type { SanityPictureDefaults } from "./types";
 export const defaultSanityPictureDefaults: SanityPictureDefaults = {
   autoWidths: {
     maxWidth: 3840,
-    maxDivisions: 12,
     step: 320,
   },
   withWebp: true,

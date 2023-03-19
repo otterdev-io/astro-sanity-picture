@@ -26,8 +26,6 @@ export interface SanityPictureDefaults {
 export interface AutoWidths {
   //The highest width image to generate when dimensions are not provided
   maxWidth: number;
-  //The highest number of resolution sources to divide up into
-  maxDivisions: number;
   //The width to jump by each source, unless we would exceed maxDivisions
   step: number;
 }

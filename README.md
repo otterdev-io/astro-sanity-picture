@@ -28,6 +28,23 @@ setSanityPictureDefaults({ imageUrlBuilder: myImageUrlBuilder })
     image={mainBgImage} /> 
 ```
 
+Attributes of the `<img />` element displayed inside the picture can be set using the `img` property.
+For example, to set the sizes attribute, which you'll likely want to set to ensure right-sizing, if your picture is displayed at less than 100vw width:
+
+```astro
+---
+import SanityPicture, {  setSanityPictureDefaults} from "astro-sanity-picture";
+
+setSanityPictureDefaults({ imageUrlBuilder: myImageUrlBuilder })
+---
+   <SanityPicture
+    image={mainBgImage} 
+    img={{sizes: "(min-width:768px) 50vw, 100vw"`}}
+    /> 
+```
+
+In this example, we are stating that image is to be displayed at half the page width when the page is >= 768px, and at the whole page width otherwise. The browser will then select the source that is appropriate for the image sizing, whether it is 50vw or 100vw.
+
 ## Fetching the image from groq
 The component will work with images fetched from a simple `groq`  query without fetching any image metadata, eg
 
@@ -74,7 +91,6 @@ const query = groq`*[_id == 'homePage'][0] {
 ```ts
 {
   maxWidth: 3840,
-  maxDivisions: 12,
   step: 320,
 }
 ```
