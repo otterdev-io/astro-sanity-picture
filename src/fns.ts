@@ -73,8 +73,8 @@ export function isSanityImageWithLqip(
 
 /**
  * Calculate automatically determined widths for an image
- * Maximum width is bounded by autoWidths.maxWidth
- * Generate widths, incrementing by autoWidths.step px
+ * If image dimensions are not available, maximum width is bounded by autoWidths.maxWidth
+ * Incrementing by autoWidths.step px
  * @param autoWidths autowidths settings to use
  * @param image image to calculate off of
  * @returns array of widths
