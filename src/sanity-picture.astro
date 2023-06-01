@@ -28,6 +28,7 @@ const {
   widths,
   img,
   lqip,
+  sizes,
   ...pictureAttributes
 } = Astro.props;
 
@@ -102,10 +103,11 @@ const [imgWidth, imgHeight] = isSanityDimensionedImage(src)
           <source
             srcset={webpSrcSet}
             type="image/webp"
+            sizes={sizes}
             {...(attributes ?? {})}
           />
         )}
-        <source srcset={srcset} {...(attributes ?? {})} />
+        <source srcset={srcset} sizes={sizes} {...(attributes ?? {})} />
       </>
     )
   })}
