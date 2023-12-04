@@ -11,17 +11,48 @@ import SanityPicture from "astro-sanity-picture";
 
 ---
    <SanityPicture
-    image={mainBgImage}
+    src={mainBgImage}
     imageUrlBuilder={myImageBuilder}
     sizes="(min-width:768px) 50vw, 100vw"
   /> 
 ```
 
+## Installation
+Get started by installing the astro component:
+
+```bash
+npm install astro-sanity-picture
+```
+
+Next, install Sanity's `imageUrlBuilder`, which the component requires to determine each corresponding `src` for responsive images:
+
+```bash
+npm install @sanity/image-url
+```
+
+Next, prepare the frontmatter within the component wherever you have queried an image, creating an `imageUrlBuilder` and pointing it to your instance of `sanityClient` from [`sanity-astro`](https://github.com/sanity-io/sanity-astro).  You will also need to have `setSanityPictureDefaults`:
+
+```typescript
+import SanityPicture, {setSanityPictureDefaults} from "astro-sanity-picture";
+import imageUrlBuilder from "@sanity/image-url";
+import {sanityClient} from "sanity:client";
+
+const imageBuilder = imageUrlBuilder(sanityClient);
+setSanityPictureDefaults({imageUrlBuilder: imageBuilder});
+```
+
+Finally, use the component:
+
+```astro
+<SanityPicture src={recipe.image} img={{alt: recipe.title}} />
+```
+
+## Configuration and Defaults
 Defaults can be set for all picture components
 
 ```astro
 ---
-import SanityPicture, {  setSanityPictureDefaults} from "astro-sanity-picture";
+import SanityPicture, {  setSanityPictureDefaults } from "astro-sanity-picture";
 
 setSanityPictureDefaults({ imageUrlBuilder: myImageUrlBuilder })
 ---
@@ -31,7 +62,8 @@ setSanityPictureDefaults({ imageUrlBuilder: myImageUrlBuilder })
      /> 
 ```
 
-Attributes of the `<img />` element displayed inside the picture can be set using the `img` property.
+### Custom `<img>` Attributes
+Attributes of the `<img />` element displayed inside the picture (such as `alt` text) can be set using the `img` property.
 
 ```astro
 ---
@@ -45,7 +77,9 @@ setSanityPictureDefaults({ imageUrlBuilder: myImageUrlBuilder })
     /> 
 ```
 
-In this example, we are stating that image is to be displayed at half the page width when the page is >= 768px, and at the whole page width otherwise. The browser will then select the source that is appropriate for the image sizing, whether it is 50vw or 100vw.
+You should **always** specify `alt` text for your images, [**even if your images are presentational**](https://developer.mozilla.org/en-US/docs/Learn/Accessibility/HTML#text_alternatives).  In future versions of this component, we will not require it, but for now, for optimal accessibility, **always** include the `img={{alt}}` when invoking the `<SanityPicture>` component.
+
+In this example, we are stating that image is to be displayed at half the page width when the page is `>=` `768px`, and at the whole page width otherwise. The browser will then select the source that is appropriate for the image sizing, whether it is `50vw` or `100vw`.
 
 ## Fetching the image from groq
 The component will work with images fetched from a simple `groq`  query without fetching any image metadata, eg
@@ -62,7 +96,7 @@ However it is able to optimize the generated source sets to be smaller than the 
 To help with this, you can use the `picture` function provided:
 
 ```ts
-import { picture } from 'astro-sanity-picture/query'
+import { picture } from 'astro-sanity-picture';
 
 const query = groq`*[_id == 'homePage'][0] {
   ...etc,
